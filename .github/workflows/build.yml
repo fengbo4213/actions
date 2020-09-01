@@ -7,6 +7,10 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+    - name: Checkout Source
+      uses: actions/checkout@v1
+    - name: li all
+      run: ls -la
     - name: Docker Login
       run: docker login -u fengbo4213 -p ${{ secrets.DOCKERHUB_LOGIN_PASSWORD }}
     - name: Build and Push the Docker Image
