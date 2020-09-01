@@ -13,7 +13,7 @@ jobs:
       run: |
         tag=${GITHUB_REF:11}
         echo "Build Tag '$tag'"
-        docker build -t fengbo4213/test:$tag ./
+        docker build -t fengbo4213/test:$tag -f ./docker/Dockerfile .
         docker push fengbo4213/test:$tag
         regex='^([0-9]+\.){0,2}(\*|[0-9]+)$'
         if [[ $tag =~ $regex ]]; then
