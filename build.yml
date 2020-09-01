@@ -1,0 +1,23 @@
+name: build docker image release
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Docker Login
+      run: docker login -u fengbo4213 -p ${{ secrets.DOCKERHUB_LOGIN_PASSWORD }}
+    - name: Build and Push the Docker Image
+      run: |
+        tag=${GITHUB_REF:11}
+        echo "Build Tag '$tag'"
+        docker build -t fengbo4213/test:$tag -f ./Dockerfile .
+        docker push fengbo4213/test:$tag
+        regex='^([0-9]+\.){0,2}(\*|[0-9]+)$'
+        if [[ $tag =~ $regex ]]; then
+          echo "Build Stable Version '$tag'"
+          docker tag fengbo4213/test:$tag fengbo4213/test:latest
+          docker push fengbo4213/test:latest
+        fi
